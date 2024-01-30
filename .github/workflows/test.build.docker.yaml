@@ -1,4 +1,4 @@
-name: test.build.docker.service
+name: test.build.dockerfile.service
 on:
   push:
     branches: [ main ]

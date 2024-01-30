@@ -2,8 +2,8 @@ package monitoringErrors
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/memo28-space-golang/memo28.gin/pkg"
-	memo28Map "github.com/memo28-space-golang/memo28.map/pkg"
+	memo28Gin "github.com/memo28-space-golang/memo28.gin"
+	memo28Map "github.com/memo28-space-golang/memo28.map"
 	"workspace/logs/errors"
 	"workspace/logs/service/monitoringErrors"
 )

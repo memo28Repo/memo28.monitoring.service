@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"workspace/logs/modules/monitoringErrors"
+	"workspace/logs/modules/settings"
 )
 
 var (
@@ -24,7 +25,7 @@ func DbInit() {
 	}
 
 	// 自动迁移模型（创建表）
-	err = db.AutoMigrate(&monitoringErrors.FrontendErrorReport{})
+	err = db.AutoMigrate(&monitoringErrors.FrontendErrorReport{}, &settings.LogSettings{})
 	if err != nil {
 		panic("failed to migrate database")
 	}

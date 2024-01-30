@@ -84,14 +84,21 @@ func (receiver ErrorLogService) GetList(c *gin.Context) (error, []monitoringErro
 		return errors.New("pageSize参数不能为空"), nil, 0
 	}
 
+	types, _ := c.GetQuery("types")
+
 	option := common.PageOptions{
 		PageSize: pageSize,
 		PageNo:   pageNo,
 	}
 
+	errorLogRepositoryListQuery := monitoringErrorsRepository.ListQuery{
+		PageOptions: option,
+		Types:       types,
+	}
+
 	errorLogRepository := monitoringErrorsRepository.ErrorLogRepository{}
 
-	err, list := errorLogRepository.List(option)
+	err, list := errorLogRepository.List(errorLogRepositoryListQuery)
 
 	_, count := errorLogRepository.GetCount()
 
