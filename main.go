@@ -49,6 +49,7 @@ func main() {
 
 		logSettingsApi.POST("/updateSettings", settings.UpdateLogSettingsDetails)
 	}
+
 	logSettingsRepository := settings2.LogSettingsRepository{}
 	logSettingsRepository.RegularlyPerform()
 

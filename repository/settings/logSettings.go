@@ -117,8 +117,8 @@ func (receiver LogSettingsRepository) DeleteLogsDontComplyWithConfigurationByNum
 
 // RegularlyPerform 定时任务执行清除无用的errorLog数据
 func (receiver LogSettingsRepository) RegularlyPerform() {
-	// 创建一个定时器，每隔60秒触发一次
-	ticker := time.NewTicker(60 * time.Second)
+	// 创建一个定时器，每隔30秒触发一次
+	ticker := time.NewTicker(10 * time.Second)
 	//defer ticker.Stop()
 
 	// 使用goroutine执行定时任务
