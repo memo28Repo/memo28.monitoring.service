@@ -8,6 +8,7 @@ import (
 type PageOptions struct {
 	PageNo   string
 	PageSize string
+	Model    interface{}
 }
 
 func Paginate(db *gorm.DB, PageOptions PageOptions) *gorm.DB {
@@ -25,5 +26,8 @@ func Paginate(db *gorm.DB, PageOptions PageOptions) *gorm.DB {
 	}
 
 	offset := (page - 1) * pageSize
-	return db.Offset(offset).Limit(pageSize)
+
+	tx := db.Model(PageOptions.Model).Offset(offset)
+
+	return tx.Limit(pageSize)
 }

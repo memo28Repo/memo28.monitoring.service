@@ -35,25 +35,41 @@ type ListQuery struct {
 	PageOptions common.PageOptions
 	// Types 筛选错误类型 window.error | user-defined ...
 	Types string
+	// UserId 用户筛选不通用户的错误日志
+	UserId string
 }
 
-func (receiver ErrorLogRepository) List(page ListQuery) (error, []monitoringErrors.FrontendErrorReport) {
+func (receiver ErrorLogRepository) List(page ListQuery) (error, []monitoringErrors.FrontendErrorReport, int64) {
 
 	var list []monitoringErrors.FrontendErrorReport
 
-	handler := common.Paginate(db.DB, page.PageOptions).Model(monitoringErrors.FrontendErrorReport{}).Order("ID DESC")
+	//handler := common.Paginate(db.DB, page.PageOptions).Order("ID DESC")
+	handler := db.DB.Model(&monitoringErrors.FrontendErrorReport{}).Order("ID DESC")
 
 	if page.Types != "" {
 		handler = handler.Where("type = ?", page.Types)
 	}
 
+	if page.UserId != "" {
+		handler = handler.Where("user_id = ?", page.UserId)
+	}
+
+	var count int64
+
+	countErr := handler.Count(&count).Error
+
+	if countErr != nil {
+		log.Error().Msg(countErr.Error())
+	}
+
+	handler = common.Paginate(handler, page.PageOptions)
 	err := handler.Find(&list).Error
 
 	if err != nil {
 		log.Error().Msg(err.Error())
-		return err, nil
+		return err, nil, 0
 	}
-	return nil, list
+	return nil, list, count
 }
 
 func (receiver ErrorLogRepository) GetCount() (error, int64) {

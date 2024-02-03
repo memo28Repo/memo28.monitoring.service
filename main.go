@@ -41,6 +41,7 @@ func main() {
 
 		monitoringErrorsApi.GET("/getErrorLogList", monitoringErrors.GetErrorLogList)
 	}
+
 	{
 		// 配置设置
 		logSettingsApi := v1Version.Group("logSettings")

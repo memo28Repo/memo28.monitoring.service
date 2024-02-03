@@ -85,22 +85,23 @@ func (receiver ErrorLogService) GetList(c *gin.Context) (error, []monitoringErro
 	}
 
 	types, _ := c.GetQuery("types")
+	userId, _ := c.GetQuery("userId")
 
 	option := common.PageOptions{
 		PageSize: pageSize,
 		PageNo:   pageNo,
+		Model:    &monitoringErrors.FrontendErrorReport{},
 	}
 
 	errorLogRepositoryListQuery := monitoringErrorsRepository.ListQuery{
 		PageOptions: option,
 		Types:       types,
+		UserId:      userId,
 	}
 
 	errorLogRepository := monitoringErrorsRepository.ErrorLogRepository{}
 
-	err, list := errorLogRepository.List(errorLogRepositoryListQuery)
-
-	_, count := errorLogRepository.GetCount()
+	err, list, count := errorLogRepository.List(errorLogRepositoryListQuery)
 
 	if err != nil {
 		return err, nil, count

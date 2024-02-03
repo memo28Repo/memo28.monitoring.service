@@ -24,6 +24,7 @@ func DbInit() {
 		panic("failed to connect database")
 	}
 
+	db = db.Debug()
 	// 自动迁移模型（创建表）
 	err = db.AutoMigrate(&monitoringErrors.FrontendErrorReport{}, &settings.LogSettings{})
 	if err != nil {
