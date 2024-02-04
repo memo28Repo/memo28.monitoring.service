@@ -5,6 +5,7 @@ import "gorm.io/gorm"
 // FrontendErrorReport 表示前端错误报告的 Gorm 模型。
 type FrontendErrorReport struct {
 	gorm.Model                // 添加默认的 gorm.Model，包含 ID、CreatedAt、UpdatedAt、DeletedAt 字段
+	Env               string  `gorm:"column:env;" json:"env"`        // 用户处于什么环境下 browser uniApp
 	UserId            string  `gorm:"column:user_id;" json:"userId"` // 用户id 用于筛选错误id时发挥作用
 	BrowserLanguage   string  `gorm:"column:browser_language;" json:"browserLanguage"`
 	Type              string  `gorm:"column:type;" json:"type"` // window.error | unhandledrejection

@@ -19,7 +19,14 @@ func (receiver LogSettingsRepository) GetSettings() (error, *settings.LogSetting
 
 	err := db.DB.Model(&settings.LogSettings{}).Last(&LogSettings).Error
 
-	if err != nil {
+	if err.Error() == "record not found" {
+		LogSettings = settings.LogSettings{
+			Number:         10,
+			ExpirationTime: 80,
+		}
+		return nil, &LogSettings
+	}
+	if err != nil && err.Error() != "record not found" {
 		log.Error().Msg(err.Error())
 		return err, nil
 	}
@@ -102,7 +109,7 @@ func (receiver LogSettingsRepository) DeleteLogsDontComplyWithConfigurationByNum
 			// 删除数量大于 Number 的log记录
 			maxNumber := monitoringErrorsCount - settings.Number
 			var ids []interface{}
-			idsError := db.DB.Model(&monitoringErrors.FrontendErrorReport{}).Order("ID DESC").Limit(int(maxNumber)).Select("ID").Find(&ids).Error
+			idsError := db.DB.Model(&monitoringErrors.FrontendErrorReport{}).Order("ID ASC").Limit(int(maxNumber)).Select("id").Find(&ids).Error
 			if idsError != nil {
 				log.Error().Msg(idsError.Error())
 				return
